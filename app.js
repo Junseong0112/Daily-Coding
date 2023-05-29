@@ -138,3 +138,9 @@ function solution(my_string, letter){
   const result = my_string.replaceAll(letter, "");
   return result
 }
+
+// 특정문자 제거하기 3
+function solution(my_string, letter){
+  const result = my_string.split(letter).join('');
+  return result
+}
