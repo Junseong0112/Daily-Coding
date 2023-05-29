@@ -117,3 +117,24 @@ function convertDoubleSpaceToSingle(str) {
   // 두칸 공백을 붙여서 한칸 공백으로 조인한다.
   return str.split('  ').join(' ');
 }
+
+// 특정문자 제거하기 1
+
+function solution(my_string, letter) {
+  // 빈 문자열 변수로 저장
+  let result = ''
+  // 각 문자열을 돌려보며 letter에 해당되지 않는 문자열만 추가한다.
+  for (let i = 0; i < my_string.length; i++){
+      if(my_string.charAt(i) !== letter){
+          result += my_string.charAt(i)
+      }
+  }
+  // 결과 값을 리턴한다.
+  return result
+}
+
+// 특정문자 제거하기 2
+function solution(my_string, letter){
+  const result = my_string.replaceAll(letter, "");
+  return result
+}
