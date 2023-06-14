@@ -144,3 +144,55 @@ function solution(my_string, letter){
   const result = my_string.split(letter).join('');
   return result
 }
+
+// 연속된 한자리 홀수숫자에 "-" 추가하기
+function insertDash(str) {
+  let result = "";
+  
+  for(let i = 0; i < str.length; i++){
+    // 현재 문자가 홀수인지 확인
+    if(str[i] % 2 !== 0){
+      // 이전 문자도 홀수인 경우 '-' 추가
+      if(i > 0 && str[i - 1] % 2 !== 0){
+        result += "-";
+      }
+    }
+    result += str[i]
+  }
+  return result
+}
+
+// 문자열을 요소로 갖는 배열을 입력받아 가장 짧은 문자열과 가장 긴 문자열을 제거해야한다
+function removeExtremes(arr) {
+  let shortestLen = 20; // 가장 짧은 문자열의 길이를 저장할 변수, 초기값을 충분히 큰 값으로 설정
+  let longestLen = 0; // 가장 긴 문자열의 길이를 저장할 변수, 초기값을 0으로 설정
+  let shortestIdx = 0; // 가장 짧은 문자열의 인덱스를 저장할 변수
+  let longestIdx = 0; // 가장 긴 문자열의 인덱스를 저장할 변수
+  for (let i = 0; i < arr.length; i++) {
+    // 배열 순회
+    if (arr[i].length >= longestLen) {
+      // 현재 문자열의 길이가 longestLen보다 크거나 같으면
+      longestLen = arr[i].length; // longestLen을 현재 문자열의 길이로 업데이트
+      longestIdx = i; // longestIdx를 현재 인덱스로 업데이트
+    }
+
+    if (arr[i].length <= shortestLen) {
+      // 현재 문자열의 길이가 shortestLen보다 작거나 같으면
+      shortestLen = arr[i].length; // shortestLen을 현재 문자열의 길이로 업데이트
+      shortestIdx = i; // shortestIdx를 현재 인덱스로 업데이트
+    }
+  }
+
+  let result = [];
+  for (let i = 0; i < arr.length; i++) {
+    // 배열 순회
+    if (i !== shortestIdx && i !== longestIdx) {
+      // 현재 인덱스가 shortestIdx와 longestIdx와 같지 않으면
+      result.push(arr[i]); // result 배열에 현재 요소를 추가
+    }
+  }
+
+  return result; // 결과 배열 반환
+}
+
+
