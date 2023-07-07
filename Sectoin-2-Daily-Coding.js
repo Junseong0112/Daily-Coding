@@ -195,4 +195,3 @@ function removeExtremes(arr) {
   return result; // 결과 배열 반환
 }
 
-
