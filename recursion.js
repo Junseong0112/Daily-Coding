@@ -46,7 +46,17 @@ function fibonacci(num) {
   return fibonacci(num - 1) + fibonacci(num - 2)
 }
 
+// 5.배열을 입력받아 모든 요소의 합을 리턴해야 합니다.
+function arrSum(arr) {
+  if (arr.length === 0) {
+    return 0;
+  }
 
+  // const [head, ...tail] = arr;
+  const head = arr[0];
+  const tail = arr.slice(1);
+  return head + arrSum(tail);
+}
 
 
 

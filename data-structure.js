@@ -106,3 +106,30 @@ const isValid = (str) => {
 // 모든 괄호가 확인한 후에도 변수가 비어있는지 확인하여 true or false를 반환한다.
   return stack.length === 0;
 }
+
+// 04_[Queue] 박스 포장
+
+function paveBox(boxes) {
+  let answer = [];
+
+  for (let i = 0; i < boxes.length; i++) {
+    let finishIndex = -1;
+
+    for (let j = 1; j < boxes.length; j++) {
+      if (boxes[0] < boxes[j]) {
+        finishIndex = j;
+        break;
+      }
+    }
+
+    if (finishIndex === -1) {
+      answer.push(boxes.length);
+      boxes.splice(0, boxes.length);
+    } else {
+      answer.push(finishIndex);
+      boxes.splice(0, finishIndex);
+    }
+  }
+
+  return Math.max(...answer);
+}
