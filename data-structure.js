@@ -238,3 +238,403 @@ class GraphWithAdjacencyMatrix {
     this.matrix[from][to] = 0;
   }
 }
+
+// 07_[Binary Search Tree] 구현
+class BinarySearchTree {
+  //BST의 constructor를 구현합니다.
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+  // tree에 value를 추가합니다.
+  insert(value) {
+    // 인자의 value가 this.value보다 작을 경우, 왼쪽 노드에서 진행합니다.
+    if (value < this.value) {
+      // this.left에 아무것도 없을 경우, 새로운 자식 노드를 추가합니다.
+      if (this.left === null) {
+        this.left = new BinarySearchTree(value);
+      }
+      // this.left의 자식 노드가 있을 경우, 자식 노드에서 insert 재귀를 사용합니다.
+      else {
+        this.left.insert(value);
+      }
+    }
+    // 인자의 value가 this.value보다 클 경우, 오른쪽 노드에서 진행합니다.
+    else if (value > this.value) {
+      // this.right에 아무것도 없을 경우, 새로운 자식 노드를 추가합니다.
+      if (this.right === null) {
+        this.right = new BinarySearchTree(value);
+      }
+      // this.left의 자식 노드가 있을 경우, 자식 노드에서 insert 재귀를 사용합니다.
+      else {
+        this.right.insert(value);
+      }
+    } else {
+      // 이미 value값을 포함하고 있습니다.
+    }
+  }
+  // tree의 value값을 탐색합니다.
+  contains(value) {
+    // 찾는 value값이 노드의 value와 일치한다면, true를 리턴합니다.
+    if (value === this.value) {
+      return true;
+    }
+    // 찾는 value값이 노드의 value 보다 작다면, 왼쪽에서 contains의 재귀를 진행합니다.
+    if (value < this.value) {
+      return !!(this.left && this.left.contains(value));
+    }
+    // 찾는 value값이 노드의 value 보다 크다면, 오른쪽에서 contains의 재귀를 진행합니다.
+    if (value > this.value) {
+      return !!(this.right && this.right.contains(value));
+    }
+  }
+  //tree를 전위 순회 합니다.
+  preorder(callback) {
+    callback(this.value);
+    if (this.left) {
+      this.left.preorder(callback);
+    }
+    if (this.right) {
+      this.right.preorder(callback);
+    }
+  }
+  // tree를 중위 순회 합니다
+  inorder(callback) {
+    if (this.left) {
+      this.left.inorder(callback);
+    }
+    callback(this.value);
+    if (this.right) {
+      this.right.inorder(callback);
+    }
+  }
+  //tree를 후위 순회 합니다
+  postorder(callback) {
+    if (this.left) {
+      this.left.postorder(callback);
+    }
+    if (this.right) {
+      this.right.postorder(callback);
+    }
+    callback(this.value);
+  }
+}
+
+// 08_[Binary Tree] 이진트리 후위순회(postorder)
+
+// 1. 재귀적 풀이법
+const postOrderTraversal = (root) => {
+	// 출력결과를 저장하기 위한 result 배열을 하나 만들어 줍니다.
+  let result = [];
+    
+	// 트리를 재귀적으로 순회하기 위한 재귀함수를 생성합니다.
+  const dfs = (node) => {
+		// 재귀의 기저조건으로 방문한 노드가 빈 노드일 경우에 해당 재귀를 종료시킨 후 상위로 올려줍니다.
+    if (node === null) return;
+
+		// 트리를 후위 순회하는 것이기 때문에 node를 root로 보았을 때,
+		// node 기준으로 왼편 -> 오른편 -> 해당 node 순으로 방문합니다.
+    dfs(node.left);
+    dfs(node.right);
+
+    result.push(node.val);
+  }
+
+	// 순회 시작을 위해 최초 받은 root노드를 매개변수로 넣어 재귀함수를 실행시켜 주니다.
+  dfs(root);
+
+	// 재귀가 모두 끝난 이후 결과를 반환해 줍니다.
+  return result;
+};
+
+
+
+
+// 2. 반복문적 풀이법
+// const postOrderTraversal = (root) => {
+//   const stack = [];
+//   const result = [];
+
+//   if (root === null) return result;
+
+//   stack.push(root);
+
+//   while (stack.length) {
+//     const node = stack.pop();
+
+// 		// 후위순회는 root노드의 값이 항상 가장 마지막에 방문되어야 하고, 그 말은 즉 출력결과에 뒷 편에 위치해야 하므로
+// 		// 매번 root노드의 값을 출력결과의 맨 앞 부분에 넣어주게 되면 반복문을 돌면서 해당 값이 뒤로 밀리면서 출력결과의 뒷 편에 위치하게 된다.
+//     result.unshift(node.val);
+
+// 		// 후위순회이기 때문에 방문순서는 left -> right -> root이지만, 윗 줄의 코드에서 매번 root노드의 값을 출력결과 배열의 맨 앞에 넣어주면서 해당 값을 뒤로 밀어내고 있기 때문에
+// 		// 다음 방문을 위한 node의 자식을 stack에 담을 때는 기존 순서대로 left -> right순으로 담아주면 된다.
+//     node.left && stack.push(node.left);
+//     node.right && stack.push(node.right);
+//   }
+
+//   return result;
+// };
+
+// 09_[Binary Tree] 이진트리 레벨순회(levelorder)
+
+const levelOrderTraversal = (root) => {
+  // 최종 출력결과를 반환하기 위한 배열을 만들어 줍니다.
+  const result = [];
+
+  // 만약 최초에 들어온 root노드 자체가 null값이라면 빈 배열을 반환하고 로직을 끝냅니다.
+  if (!root) return result;
+
+  // BFS를 위한 Queue를 만들어 주고, BFS시작을 위해 최초값인 root노드를 큐에 넣어줍니다.
+  const queue = [];
+  queue.push(root);
+
+  // queue에 값이 더 이상 존재하지 않을 때까지 루프를 돌며 로직을 진행시킵니다.
+  while (queue.length > 0) {
+      // 트리의 각 레벨별로 값을 묶어줘야 하기 때문에 각 레벨을 위한 내부 배열을 선언합니다.
+      const subResult = [];
+      // 해당 레벨에 존재하는 노드의 수 만큼 for 루프를 돌기 위해서 미리 큐의 사이즈를 변수에 저장합니다.
+      const size = queue.length;
+
+      // 해당 레벨에 존재하는 노드의 수만큼 for 루프를 돌면서 내부 배열(subResult)에 값을 추가해 갑니다.
+      for (let i = 0; i < size; ++i) {
+          // queue에서 맨 앞(head)값을 꺼내서 노드로 저장하고
+          const node = queue.shift();
+          // 해당 노드의 값을 subResult 배열에 넣어줍니다.
+          subResult.push(node.val);
+
+
+          // 다음 레벨을 순회하기 위해 해당 노드에 왼쪽이나 오른쪽 자식이 있으면 큐에 삽입해 줍니다.
+          node.left && queue.push(node.left);
+          node.right && queue.push(node.right);
+      }
+
+      // 위의 for루프에서 해당 레벨에 해당하는 subResult 배열을 완성시킨 후 최종 반환배열인 result에 해당 subResult를 추가해 줍니다.
+      result.push(subResult);
+  }
+
+  // 최종 반환배열인 result를 반환하고 로직을 끝내줍니다.
+  return result;
+};
+
+// 10_[Graph] 인접 행렬 길찾기
+
+function getDirections(matrix, from, to) {
+
+  // queue를 간단하게 생성하고, 첫 시작점으로 from을 할당합니다.
+  const queue = [from];
+  const enqueue = (n) => queue.push(n);
+  const dequeue = (n) => queue.shift();
+
+  // 방문했다는 것을 표시하기 위해 1차원 행렬을 생성합니다.
+  const isVisited = new Array(matrix.length).fill(false);
+
+  // 첫 정점 방문 여부를 표시합니다.
+  isVisited[from] = true
+
+  // queue(방문할 곳)의 사이즈가 0이 될 때까지 반복합니다.
+  while (queue.length > 0) {
+
+    // queue에서 정점을 하나 빼서 now에 할당합니다.
+    const now = dequeue();
+
+    // 목적지인지 검사하고, 목적지라면 true를 반환합니다.
+    if (now === to) return true;
+
+    // 해당 정점의 간선들을 확인합니다.
+    for (let next = 0; next < matrix[now].length; next++) {
+      // 만약, 간선이 있고 방문하지 않았다면
+      if (matrix[now][next] && !isVisited[next]){
+        // queue에 next를 넣습니다. (다음 정점으로 가기 위해)
+        enqueue(next);
+        // 해당 정점을 방문했다는 것을 표시합니다.
+        isVisited[next] = true
+      }
+    }
+    
+  }
+
+  // 길이 없다면 false를 반환합니다.
+  return false;
+}
+// ------------------------------------------------------
+// 11_[DFS / BFS] 연결된 정점들
+
+function connectedVertices(edges) {
+
+	// 최대 버텍스를 찾습니다.
+	const maxVertex = edges.reduce((a, c) => {
+		const bigger = Math.max(...c);
+		if (bigger > a) return bigger;
+		return a;
+	}, 0);
+
+	// 이 레퍼런스는 인접 리스트로 만듭니다. (행렬도 가능합니다. 행렬로 작성해 보세요.)
+	const adjList = {};
+
+  // 인접 리스트에 최대 버텍스 크기만큼 반복해 버텍스를 만들어 줍니다.
+	for (let i = 0; i <= maxVertex; i++) {
+		adjList[i] = [];
+	}
+
+  // edges를 순회하며, (무향 그래프이므로 쌍방으로) 간선을 연결해 줍니다.
+	// 이렇게 adjList 그래프가 완성되었습니다.
+	for (let i = 0; i < edges.length; i++) {
+		adjList[edges[i][0]].push(edges[i][1]);
+		adjList[edges[i][1]].push(edges[i][0]);
+	}
+
+  // 방문한 버텍스를 담을 객체를 선언합니다.
+	const visited = {};
+	// 컴포넌트가 몇 개인지 카운트할 변수를 선언합니다.
+	let count = 0;
+
+  // 그래프에 있는 버텍스를 전부 순회합니다.
+	for (let vertex = 0; vertex <= maxVertex; vertex++) {
+
+		// 만약 i 번째 버텍스를 방문하지 않았다면 bfs로 해당 버텍스와, 버텍스와 연결된(간선) 모든 버텍스를 방문합니다.
+		// BFS로 갈 수 있는 모든 정점들을 방문하며 visited에 담기 때문에, 방문한 버텍스는 visited에 들어 있어서 bfs를 돌지 않습니다.
+		// 이렇게 컴포넌트를 확인합니다.
+		if (!visited[vertex]) {
+			// 그래프와 버텍스, 방문했는지 확인할 visited를 변수에 담습니다.
+			bfs(adjList, vertex, visited);
+
+			// 카운트를 셉니다.
+			count++;
+		}
+	}
+
+  // 카운트를 반환합니다.
+	return count;
+}
+
+
+// bfs solution
+function bfs(adjList, vertex, visited) {
+
+	// bfs는 가장 가까운 정점부터 탐색하기 때문에 queue를 사용합니다.
+	// queue에 vertex를 담습니다.
+	const queue = [vertex];
+	// 해당 버텍스를 방문했기 때문에 visited에 담아 주고, 방문했다는 표시인 true를 할당합니다.
+	visited[vertex] = true;
+
+  // queue의 길이가 0일 때까지 순환합니다.
+	while (queue.length > 0) {
+
+		// cur 변수에 정점을 할당합니다.
+		// queue는 선입선출이기 때문에 shift 메소드를 사용하여 버텍스를 가져옵니다.
+		const cur = queue.shift();
+
+		// 그래프의 cur 정점에 있는 간선들을 전부 순회합니다.
+		for (let i = 0; i < adjList[cur].length; i++) {
+
+			// 만약, 해당 버텍스를 방문하지 않았다면 queue에 삽입합니다.
+			// 방문했다는 표시로 visited에 해당 버텍스를 삽입하고 true를 할당합니다.
+			if (!visited[adjList[cur][i]]) {
+				queue.push(adjList[cur][i]);
+				visited[adjList[cur][i]] = true;
+			}
+
+			// queue에 다음으로 방문할 버텍스가 있기 때문에 while은 멈추지 않습니다.
+			// 만약, queue가 비어 있다면 더 이상 갈 곳이 없는 것이기 때문에 bfs 함수를 종료하고 카운트를 셉니다.
+		}
+	}
+}
+
+// dfs solution
+// bfs 함수 대신 dfs를 사용해도 결과는 같습니다.
+function dfs(adjList, vertex, visited) {
+	// 해당 버텍스에 방문했다는 표시로 visited key에 vertex를 담고 값에 true를 할당합니다.
+	visited[vertex] = true;
+
+	// 해당 버텍스의 모든 간선들을 전부 순회합니다.
+	for (let i = 0; i < adjList[vertex].length; i++) {
+
+		// 만약 i번째 간선과 이어진 버텍스를 방문하지 않았다면
+		if (!visited[adjList[vertex][i]]) {
+			// dfs를 호출해(재귀) 방문합니다.
+			dfs(adjList, adjList[vertex][i], visited);
+		}
+		// 모든 방문이 종료되면 다음 버텍스를 확인합니다.
+		// 재귀가 종료되면(한 정점에서 이어진 모든 간선들을 확인했다면) dfs 함수를 종료하고 카운트를 셉니다. 
+	}
+}
+
+
+// matrix
+// function connectedVertices(edges) {
+//   // 행렬을 기준으로 하겠습니다.
+
+//   // 제일 큰 버텍스 찾기.
+//   const max = Math.max(...edges.flat());
+
+//   // 버텍스 찾았다면? 행렬 만들기
+//   const matrix = new Array(max + 1).fill(0).map(e => new Array(max + 1).fill(0));
+
+//   //엣지 넣기 ㅎㅎ
+//   edges.forEach(e => {
+//     matrix[e[0]][e[1]] = 1;
+//     matrix[e[1]][e[0]] = 1;
+//   })
+
+//   // 탐색에 가장 중요한 건? 두 번 방문하지 않는다.
+//   let visited = new Array(matrix.length).fill(false);
+
+//   // 카운트
+//   let count = 0;
+
+//   // 버텍스를 하나씩 순회하면서 연결된 정점이 있는지 확인한다!!
+//   for(let i = 0; i < matrix.length; i++) {
+//     if(visited[i] === false) {
+//       bfs(matrix, i, visited);
+//       count++;
+//     }
+//   }
+
+//   // 카운트를 반환합니다.
+// 	return count;
+// }
+
+
+// // bfs solution
+// function bfs(matrix, v, visited) {
+//   // 큐에 시작점 넣고
+//   let Q = [v];
+//   // 방문했다고 표시
+//   visited[v] = true;
+//   // 큐에 모든 게 없어질 ㄸㅐ까지 반복합니다.
+
+//   while(Q.length !== 0) {
+//     // 큐에서 하나 뺍니다.
+//     let current = Q.pop();
+//     // 현재 정점 확인합니다.
+//     for(let i = 0; i < matrix[current].length; i++) {
+//       // 정점 순회하면서?
+//       if(visited[i] !== true && matrix[current][i] === 1) {
+//         // 큐에 i를 넣자
+//         Q.unshift(i);
+//         // 방문했다고 표현하자
+//         visited[i] = true;
+//       }
+//     }
+//   }
+// }
+
+// // dfs solution
+// // bfs 함수 대신 dfs를 사용해도 결과는 같습니다.
+// function dfs(matrix, vertex, visited) {
+// 	// 해당 버텍스에 방문 표시
+// 	visited[vertex] = true;
+
+// 	// 해당 버텍스의 모든 간선들을 전부 순회합니다.
+// 	for (let i = 0; i < matrix[vertex].length; i++) {
+
+// 		// 만약 i번째 간선과 이어진 버텍스를 방문하지 않았다면
+// 		if(visited[i] !== true && matrix[vertex][i] === 1){
+// 			// dfs를 호출해(재귀) 방문합니다.
+// 			dfs(matrix, i, visited);
+// 		}
+// 		// 모든 방문이 종료되면 다음 버텍스를 확인합니다.
+// 		// 재귀가 종료되면(한 정점에서 이어진 모든 간선들을 확인했다면) dfs 함수를 종료하고 카운트를 셉니다. 
+// 	}
+// }
