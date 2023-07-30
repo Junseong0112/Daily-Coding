@@ -70,4 +70,15 @@ function arrProduct(arr) {
   return head * arrProduct(tail);
 }
 
+// 7.배열을 입력받아 그 길이를 리턴해야 합니다.
+function arrLength(arr) {
+  if (arr.isEmpty()) {
+    return 0;
+  }
+
+  // const [head, ...tail] = arr;
+  const tail = arr.slice(1);
+  return 1 + arrLength(tail);
+}
+
 
