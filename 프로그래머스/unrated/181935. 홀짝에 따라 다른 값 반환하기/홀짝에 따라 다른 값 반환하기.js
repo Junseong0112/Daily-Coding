@@ -5,7 +5,7 @@ function solution(n) {
             result += i;
     }else{ 
         for(let i = 2; i <= n; i+=2) 
-            result += Math.pow(i,2);
+            result += i ** 2
     }
     return result;
 }
