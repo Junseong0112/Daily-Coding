@@ -1,7 +1,6 @@
 function solution(maps) {
-    const n = maps.length; // 맵의 행 크기 (가로)
-    const m = maps[0].length; // 맵의 열 크기 (세로)
-    // const directions = [[0, -1], [0, 1], [-1, 0], [1, 0]] // 상, 하, 좌, 우
+    const n = maps.length; // 맵의 행 크기 (row)
+    const m = maps[0].length; // 맵의 열 크기 (column)
     const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]] // 상, 하, 좌, 우
     
     const queue = [[0, 0, 1]]; // 행, 열, 이동 횟수
